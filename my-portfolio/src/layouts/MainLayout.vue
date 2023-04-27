@@ -2,19 +2,43 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleMenu" />
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          class="mobile-only"
+          @click="toggleDrawer"
+        />
 
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title v-if="$q.platform.is.desktop">
+          Tales B. de Albuquerque
         </q-toolbar-title>
+        <q-toolbar-title v-if="$q.platform.is.mobile"> Tales </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Frontend Dev</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above bordered :mini="menuState">
+    <q-drawer
+      :show-if-above="!$q.platform.is.mobile"
+      bordered
+      mini-to-overlay
+      :overlay="$q.platform.is.mobile"
+      v-model="drawerState"
+      :mini="$q.platform.is.mobile ? false : menuState"
+      :width="200"
+      :breakpoint="300"
+    >
       <q-list>
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
+        <EssentialLink
+          @mouseover="menuState = false"
+          @mouseout="menuState = true"
+          v-for="link in linksList"
+          :key="link.title"
+          v-bind="link"
+        />
       </q-list>
     </q-drawer>
 
@@ -25,14 +49,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
-
-
 const menuState = ref(false)
-const toggleMenu = () => {
-  menuState.value = !menuState.value
+const drawerState = ref(true)
+
+const toggleDrawer = () => {
+  drawerState.value = !drawerState.value
 }
 
 const linksList = [
@@ -43,7 +67,7 @@ const linksList = [
   },
   {
     title: 'Redes Sociais',
-    icon: 'groups',
+    icon: 'o_hub',
     to: '/socialmedia'
   },
   {
@@ -52,28 +76,9 @@ const linksList = [
     to: '/projects'
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Contato',
+    icon: 'contact_phone',
+    to: '/contact'
   }
 ]
 </script>
